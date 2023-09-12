@@ -1,0 +1,33 @@
+# java反编译器对比
+
+* 概述
+  * 如果是`jar`转`java`：选`Procyon`
+    * 或基于`Procyon`的GUI工具：`Luyten`
+  * 如果是`apk`/`dex`转`java`：选`jadx`
+* 详解
+  * 关于`JD-GUI`：不好用
+    * 网上很多人提到了用的比较广的：`JD-GUI`
+      * 经过实测，基本够用，但不够完美
+        * 有些文件转换会出错
+        * 且代码逻辑也不够清晰
+  * 后续自己测试了多个其他的反编译器
+    * `Procyon`、`CFR`、`JD-GUI`等等
+  * 最终结论如下：
+    * `jar`转`java`的反编译效果：`Jadx` > `Procyon` > `CFR` > `JD-GUI`
+      * `Procyon`
+        * 特点
+          * 代码转换不出错的
+        * 用来
+          * 查看代码：用基于Procyon的Luyten去查看代码
+          * 导出代码：用Procyon去从jar反编译转换出java源代码
+    * `apk`/`dex`转`java`，优先选用`jadx`
+      * `jadx`
+        * 特点
+          * 代码转换不仅不出错（或者很少出错）
+          * 关键是代码逻辑更加清晰和易懂
+            * 大大提升代码质量，使得代码更加易读
+        * 用来
+          * 直接用jadx打开未加固的apk
+            * 即可查看和导出java源代码
+          * 打开（用FDex2从加固了的apk导出的）dex文件
+            * 查看和导出java源代码
