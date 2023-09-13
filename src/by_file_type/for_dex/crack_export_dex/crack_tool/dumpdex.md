@@ -15,3 +15,7 @@
 > [集成了DumpDex的DeveloperHelper](https://github.com/WrBug/DeveloperHelper)
 >
 > -> 否则我此处会导致夜神模拟器中的app运行时产生崩溃，从而无法导出想要的dex文件
+
+具体用法详见：
+
+[配合XPosed插件导出dex · 好用的安卓模拟器：夜神Nox (crifan.org)](https://book.crifan.org/books/good_android_emulator_nox/website/usage/mac/xposed_plugin_export_dex.html)
