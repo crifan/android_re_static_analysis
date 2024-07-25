@@ -1,7 +1,11 @@
 # 参考资料
 
 * 【已解决】安卓逆向LiftFileManager：so库文件libRehADGd.so
+* 【记录】用CFR去反编译安卓抖音apk
+* 【未解决】如何用CFR反编译apk或dex文件
 * 
+* [Java 反编译工具的使用与对比分析 | 未读代码 (wdbyte.com)](https://www.wdbyte.com/2021/05/java-decompiler/)
+* [Android反编译和工具 · 卓护平台文档 · 看云 (kancloud.cn)](https://www.kancloud.cn/yelbee111/annhub/991859)
 * [【基本解决】尝试破解安卓apk马蜂窝去得到java源码 – 在路上](http://www.crifan.org/try_crack_android_apk_mafengwo_to_get_java_sourcecode)
 * 
 * [Ghidra逆向分析工具使用与实战_ghidra 使用_Ba1_Ma0的博客-CSDN博客](https://blog.csdn.net/qq_45894840/article/details/124556441)
