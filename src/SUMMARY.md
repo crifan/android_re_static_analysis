@@ -55,7 +55,7 @@
         * [JAD](by_file_type/for_jar/jar_to_java/jad.md)
   * [针对so](by_file_type/for_so/README.md)
     * [ELF文件格式](by_file_type/for_so/elf_format/README.md)
-    * [导出静态资源字符串](by_file_type/for_so/export_static_string/README.md)
+    * [导出静态字符串资源信息](by_file_type/for_so/export_static_string/README.md)
       * [readelf](by_file_type/for_so/export_static_string/readelf.md)
       * [objdump](by_file_type/for_so/export_static_string/objdump.md)
       * [rabin2](by_file_type/for_so/export_static_string/rabin2.md)
