@@ -5,7 +5,7 @@
 * 官网地址
   * [WrBug/dumpDex: 💯一款Android脱壳工具，需要xposed支持, 易开发已集成该项目](https://github.com/WrBug/dumpDex)
 
-> #### warning:: 不要从DeveloperHelper下载
+> [!warning|title:不要从DeveloperHelper下载]
 > 对于想要去下载dumpDex的话，建议去：
 >
 > https://github.com/WrBug/dumpDex/releases
