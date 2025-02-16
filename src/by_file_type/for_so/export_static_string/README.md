@@ -87,13 +87,15 @@ objdump -R libRehADGd_arm64v8a.so > libRehADGd_objdump_R_dynamicReloc.coffee
 
 用脚本批量处理
 
-`exportElf_StrResInfo.sh`
+* `exportElf_StrResInfo.sh`
 
 ```sh
 #!/bin/bash
 # Function: Export/Extract single ELF file string and resources related info
 # Author: Crifan Li
-# Update: 20240820
+# Usage:
+#   exportElf_StrResInfo.sh <inputSoLibFile.so> [<outputFolder>]
+# Update: 20240824
 
 # SEPERATOR="--------------------"
 SEPERATOR="===================="
@@ -102,28 +104,76 @@ function log() {
   echo "${SEPERATOR} $1 ${SEPERATOR}"
 }
 
+function extractInputFolder(){
+  curInputFile=$1
+  # echo "curInputFile=${curInputFile}"
+  retInputFolder="$(dirname "${curInputFile}")"
+  # echo "retInputFolder=${retInputFolder}"
+  # return retInputFolder
+  # return $retInputFolder
+  # echo ${retInputFolder}
+  echo $retInputFolder
+}
+
+function extractFilenameNoSuffix(){
+  curInputFile=$1
+  # echo "curInputFile=${curInputFile}"
+  filenameWithSuffix="$(basename "${inputFile}")"
+  # echo "filenameWithSuffix=${filenameWithSuffix}"
+  filenameNoSuffix=${filenameWithSuffix%.*}
+  # echo "filenameNoSuffix=${filenameNoSuffix}"
+  echo ${filenameNoSuffix}
+}
+
+function initOutputFolerFromInputFolder(){
+  inputFolder=$1
+  # echo "inputFolder=${inputFolder}"
+  outputFoler=$2
+  # echo "outputFoler=${outputFoler}"
+  if [ -z "$outputFoler" ]
+  then
+    if [ -z "$inputFolder" ]
+    then
+      outputFoler="."
+    else
+      outputFoler=${inputFolder}
+    fi
+    # echo "outputFoler=${outputFoler}"
+    echo ${outputFoler}
+  else
+    echo ${outputFoler}
+  fi
+}
+
 inputFile=$1
 echo "inputFile=${inputFile}"
 outputFoler=$2
 echo "outputFoler=${outputFoler}"
 
-inputFolder="$(dirname "${inputFile}")"
+# inputFolder="$(dirname "${inputFile}")"
+inputFolder=$(extractInputFolder $inputFile)
 echo "inputFolder=${inputFolder}"
-elfFileWithSuffix="$(basename "${inputFile}")"
-echo "elfFileWithSuffix=${elfFileWithSuffix}"
-elfFile=${elfFileWithSuffix%.*}
+
+# elfFileWithSuffix="$(basename "${inputFile}")"
+# echo "elfFileWithSuffix=${elfFileWithSuffix}"
+# elfFile=${elfFileWithSuffix%.*}
+# echo "elfFile=${elfFile}"
+elfFile=$(extractFilenameNoSuffix $inputFile)
 echo "elfFile=${elfFile}"
 
-if [ -z "$outputFoler" ]
-then
-  if [ -z "$inputFolder" ]
-  then
-    outputFoler="."
-  else
-    outputFoler=${inputFolder}
-  fi
-  echo "outputFoler=${outputFoler}"
-fi
+# if [ -z "$outputFoler" ]
+# then
+#   if [ -z "$inputFolder" ]
+#   then
+#     outputFoler="."
+#   else
+#     outputFoler=${inputFolder}
+#   fi
+#   echo "outputFoler=${outputFoler}"
+# fi
+
+outputFoler=$(initOutputFolerFromInputFolder $inputFolder $outputFoler)
+echo "outputFoler=${outputFoler}"
 
 log "Exporting info use rabin2"
 rabin2 -I ${inputFile} > ${outputFoler}/${elfFile}_rabin2_I_identification.coffee
@@ -175,17 +225,23 @@ exportElf_StrResInfo.sh xxx.so
 exportElf_StrResInfo.sh inputFolder/xxx.so outputFolder
 ```
 
+提示：
+
+* 运行前，记得加上可执行权限：`chmod +x exportElf_StrResInfo.sh`
+
 ## shell脚本自动执行：某目录下所有的ELF的so文件
 
 脚本：
 
-`exportSoSymbol.sh`
+* `batchExportElfInfo.sh`
 
 ```sh
 #!/bin/bash
 # Function: Batch export so file symbols/functions
 # Author: Crifan Li
-# Update: 20240817
+# Usage:
+#   batchExportElfInfo.sh <inputFolder_AllSoLibs> <outputFolder>
+# Update: 20240824
 
 # SEPERATOR="--------------------"
 SEPERATOR="===================="
@@ -194,31 +250,61 @@ function log() {
   echo "${SEPERATOR} $1 ${SEPERATOR}"
 }
 
-INPUT_SO_FOLDER="/xxx/resources/lib/arm64-v8a"
-log "Input folder: ${INPUT_SO_FOLDER}"
+function initOutputFolerFromInputFolder(){
+  inputFolder=$1
+  # echo "inputFolder=${inputFolder}"
+  outputFoler=$2
+  # echo "outputFoler=${outputFoler}"
+  if [ -z "$outputFoler" ]
+  then
+    if [ -z "$inputFolder" ]
+    then
+      outputFoler="."
+    else
+      outputFoler=${inputFolder}
+    fi
+    # echo "outputFoler=${outputFoler}"
+    echo ${outputFoler}
+  else
+    echo ${outputFoler}
+  fi
+}
 
-OUTPUT_FOLDER="douyinSo_exportedSymbols"
+inputFolder=$1
+echo "inputFolder=${inputFolder}"
+outputFoler=$2
+echo "outputFoler=${outputFoler}"
 
-soFileList=$(ls $INPUT_SO_FOLDER)
-# soFileList=$(ls ${INPUT_SO_FOLDER})
-# soFileList=`ls $INPUT_SO_FOLDER`
-# soFileList=`ls ${INPUT_SO_FOLDER}`
+outputFoler=$(initOutputFolerFromInputFolder $inputFolder $outputFoler)
+echo "outputFoler=${outputFoler}"
+
+soFileList=$(ls $inputFolder)
+# soFileList=$(ls ${inputFolder})
+# soFileList=`ls $inputFolder`
+# soFileList=`ls ${inputFolder}`
 # echo "soFileList=${soFileList}"
 for eachSoFilename in $soFileList
 do
   # eachFilename=$eachSoFilename[0,-3]
-  eachFilename=${eachSoFilename%???}
-  outputFilename="${eachFilename}_rabin2_E_exports.coffee"
-  inputFullFile=$INPUT_SO_FOLDER/$eachSoFilename
-  outputFullFile=$OUTPUT_FOLDER/$outputFilename
+  # eachFilename=${eachSoFilename%???}
+  eachFilename=${eachSoFilename%.*}
+  # echo "eachFilename=${eachFilename}"
+  # outputFilename="${eachFilename}_rabin2_E_exports.coffee"
+  outputFilename="${eachFilename}_rabin2_l_libraries.coffee"
+  inputFullFile=$inputFolder/$eachSoFilename
+  outputFullFile=$outputFoler/$outputFilename
   echo "$eachSoFilename => $outputFullFile"
-  rabin2 -E $inputFullFile > $outputFullFile
+  # rabin2 -E $inputFullFile > $outputFullFile
+  rabin2 -l $inputFullFile > $outputFullFile
 done
 ```
 
-使用：
+调用举例：
 
-* 把`INPUT_SO_FOLDER`改为你的目录
-* 把上述内容保存到`exportSoSymbol.sh`
-* 加上可执行权限：`chmod +x exportSoSymbol.sh`
-* 运行脚本：`exportSoSymbol.sh`
+```bash
+batchExportElfInfo.sh inputFoler_allSoLibs oututFoler_exportedAllSoLibsInfo
+```
+
+提示：
+
+* 运行前，记得加上可执行权限：`chmod +x batchExportElfInfo.sh`
